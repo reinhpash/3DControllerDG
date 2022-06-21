@@ -2,7 +2,7 @@
  3D player controller
 
 [DEFAULT AYARLAR]
-WASD Hareket
-Left Shift Koşma
-Space zıplama
-E arabaya bin/in
+WASD Hareket <br>
+Left Shift Koşma<br>
+Space zıplama<br>
+E arabaya bin/in<br>
