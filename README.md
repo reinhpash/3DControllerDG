@@ -1,4 +1,4 @@
-# 3DController_DumbellGames
+# 3DController
  3D player controller
 
 <h1>[DEFAULT AYARLAR]</h1>
