@@ -44,8 +44,8 @@ public class CarController : MonoBehaviour
     public bool isActive;
 
 
-    //isActive booluna tekerlekleri hareket ettirdiğimden scriptten ulaşıyorum.
-    //eğer isActive true ise tekerlekler inputa göre dönüyor.
+    //isActive booluna tekerlekleri hareket ettirdiÃ°imden scriptten ulaÃ¾Ã½yorum.
+    //eÃ°er isActive true ise tekerlekler inputa gÃ¶re dÃ¶nÃ¼yor.
     private void OnEnable()
     {
         isActive = true;
@@ -60,9 +60,9 @@ public class CarController : MonoBehaviour
     private void Start()
     {
         /* 
-         Oyun başladığı zaman bize hareket anlamında sıkıntı çıkartmaması için küre ve araba colliderlarını koyduğumuz
-         objeleri null parent yapıyoruz.
-         defaultDrag değişkeninde motor olarak kullanacağımız kürenin dragını alıyoruz.
+         Oyun baÃ¾ladÃ½Ã°Ã½ zaman bize hareket anlamÃ½nda sÃ½kÃ½ntÃ½ Ã§Ã½kartmamasÃ½ iÃ§in kÃ¼re ve araba colliderlarÃ½nÃ½ koyduÃ°umuz
+         objeleri null parent yapÃ½yoruz.
+         defaultDrag deÃ°iÃ¾keninde motor olarak kullanacaÃ°Ã½mÃ½z kÃ¼renin dragÃ½nÃ½ alÃ½yoruz.
          */
         sphereRB.transform.parent = null;
         carRB.transform.parent = null;
@@ -97,10 +97,10 @@ public class CarController : MonoBehaviour
     public void CarSoundSet(bool value)
     {
         /*
-         Başka scriptlerden erişerek arabanın sesini açıp kapatmayı ayarlamak için böyle bir metot yazdım.
-         true ise araba ileri gidiyor demek ve ses buna göre değişiyor.
+         BaÃ¾ka scriptlerden eriÃ¾erek arabanÃ½n sesini aÃ§Ã½p kapatmayÃ½ ayarlamak iÃ§in bÃ¶yle bir metot yazdÃ½m.
+         true ise araba ileri gidiyor demek ve ses buna gÃ¶re deÃ°iÃ¾iyor.
         false ise araba idle sesine gidiyor.
-        idle sesindeyken yavaşça motor pitchini düşürüyor.
+        idle sesindeyken yavaÃ¾Ã§a motor pitchini dÃ¼Ã¾Ã¼rÃ¼yor.
          */
         if (value == true)
         {
@@ -137,7 +137,7 @@ public class CarController : MonoBehaviour
     private void WheelTurn()
     {
         /*
-         Arabayı döndürürken tekerlerinde dönmesi için en turninput değerimizi kullanıyoruz
+         ArabayÃ½ dÃ¶ndÃ¼rÃ¼rken tekerlerinde dÃ¶nmesi iÃ§in en turninput deÃ°erimizi kullanÃ½yoruz
          */
         leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, (turnInput * wheelMaxTurn), leftFrontWheel.localRotation.eulerAngles.z);
         rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, (turnInput * wheelMaxTurn) - 180, leftFrontWheel.localRotation.eulerAngles.z);
@@ -146,8 +146,8 @@ public class CarController : MonoBehaviour
     private void Turn()
     {
         /*
-            Araba sadece yerde ise dönüş yapmasına izin veriyorum.
-            dönüşleri yavaşlatmak için turnstrength değeri düşürülebilir.
+            Araba sadece yerde ise dÃ¶nÃ¼Ã¾ yapmasÃ½na izin veriyorum.
+            dÃ¶nÃ¼Ã¾leri yavaÃ¾latmak iÃ§in turnstrength deÃ°eri dÃ¼Ã¾Ã¼rÃ¼lebilir.
          */
         if (isGrounded)
             transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrenght * Time.deltaTime * Input.GetAxis("Vertical"), 0f));
@@ -180,7 +180,7 @@ public class CarController : MonoBehaviour
         {
             if (speedInput != 0)
             {
-                //input olduğu sürece engine speed değerini arttırıyorum bu da motor sesini etkiliyor.
+                //input olduÃ°u sÃ¼rece engine speed deÃ°erini arttÃ½rÃ½yorum bu da motor sesini etkiliyor.
                 engineSpeed += .1f * Time.deltaTime;
             }
 
@@ -194,12 +194,17 @@ public class CarController : MonoBehaviour
         isGrounded = false;
         RaycastHit rayHit;
 
-        //raypoint kullanmak yerinde direkt objesimizin transformunu da kullanabiliriz ama bu şekilde daha garanti oluyor.
+        //raypoint kullanmak yerinde direkt objesimizin transformunu da kullanabiliriz ama bu Ã¾ekilde daha garanti oluyor.
 
         if (Physics.Raycast(rayPoint.position, -this.transform.up, out rayHit, groundRayLenght, GroundLayer))
         {
             isGrounded = true;
-
+            /*
+                rotateTo deÄŸiÅŸkenine her ile arabamÄ±z arasÄ±ndaki aÃ§Ä±yÄ± alÄ±yor.
+                slerp ile aracÄ±n rotasyonunu yavaÅŸÃ§a ayarlÄ±yoruz
+                slerp ve rotateTo kullanmak yerine direkt transform.rotationu ilk satÄ±ra eÅŸitleyebiliriz
+                ancak hoÅŸ bir gÃ¶rÃ¼ntÃ¼ olmuyor.
+             */
             Quaternion rotateTo = Quaternion.FromToRotation(transform.up, rayHit.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, rotateTo, alignToGroundTime * Time.deltaTime);
         }
@@ -210,13 +215,13 @@ public class CarController : MonoBehaviour
             sphereRB.drag = defaultDrag;
             if (Mathf.Abs(speedInput) > 0)
             {
-                //Eğer araba yerde ve kullanıcı arabanın ilerlemesi için input giriyorsa
+                //EÃ°er araba yerde ve kullanÃ½cÃ½ arabanÃ½n ilerlemesi iÃ§in input giriyorsa
                 sphereRB.AddForce(transform.forward * speedInput, ForceMode.Acceleration);
             }
         }
         else
         {
-            //Eğer araba yerde değil ise arabaya yerçekimi uyguluyoruz.
+            //EÃ°er araba yerde deÃ°il ise arabaya yerÃ§ekimi uyguluyoruz.
             sphereRB.drag = airDrag;
             sphereRB.AddForce(transform.up * -gravity * 1000f);
         }
